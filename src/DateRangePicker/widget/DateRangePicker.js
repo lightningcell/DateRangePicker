@@ -26,7 +26,7 @@ define([
 	function getMxVersion () {
 		var mxVersion = mx.version;
 		var mxMajorVersion = mxVersion.substring(0, mxVersion.indexOf("."));
-		
+
 		return mxMajorVersion;
 	}
 
@@ -47,11 +47,17 @@ define([
 		showTimePicker: false,
 		show24HourTimePicker: false,
 		timePickerIncrement: 0,
-		
+
         onChangeMicroflow: "",
         onChangeMicroflowProgress: "",
         onChangeMicroflowProgressMsg: "",
         onChangeMicroflowAsync: "",
+
+        /* Locale options */
+        applyLabel : "",
+        cancelLabel :"",
+        daysList: null,
+        monthList: null,
 
 
 		/* Label options */
@@ -59,7 +65,13 @@ define([
         labelWidth: "",
         displayEnum: "",
 
-        // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
+        /* Calendar options */
+        opensIn: "",
+        dropsOn: "",
+        isSingleDatePicker: false,
+        showTimePickerSeconds: true,
+
+    // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
         _handle: null,
         _alertDiv: null,
         _contextObj: null,
@@ -67,7 +79,7 @@ define([
         _dateRangePickerButton: null,
         _params: null,
         _readOnly: false,
-		_initialStartDate: null, 
+		_initialStartDate: null,
 		_initialEndDate: null,
 		_startDate: null, //holds the current selected start date, used to check if the selection has changed
 		_endDate: null, // holds the current selected end date, used to check if the selection has changed
@@ -93,40 +105,40 @@ define([
                 .get(0);
 
             this._setParams();
-			
+
 			//init daterange picker
 			 $(this._dateRangePicker).daterangepicker(this.params);
-			
-			var drpData = $(this._dateRangePicker).data('daterangepicker');
-			
+
+			var drpData = $(this._dateRangePicker).data("daterangepicker");
+
 			//set initial start and end date, to be used for clearing the calendar
 			this._initialStartDate = drpData.startDate;
 			this._initialEndDate = drpData.endDate;
 			this._startDate = this._initialStartDate;
 			this._endDate = this._initialEndDate;
-			
+
 			var self = this;
 			 //set Clear event
-			 $(this._dateRangePicker).on('cancel.daterangepicker', function(ev, picker) {
+			 $(this._dateRangePicker).on("cancel.daterangepicker", function(ev, picker) {
 				//reset initial dates
 				picker.setStartDate(self._initialStartDate);
 				picker.setEndDate(self._initialEndDate);
 				self._startDate = self._initialStartDate;
 				self._endDate = self._initialEndDate;
-				
+
 				self._hasSelectedDateRange = false;
-				
+
 				//reset attributes
-				$(this).val('');
+				$(this).val("");
 				self._contextObj.set(self.startDateAttribute, "");
 				self._contextObj.set(self.endDateAttribute, "");
 				if (self.onChangeMicroflow.length > 0) {
                     self._runMicroflow(self._contextObj, self.onChangeMicroflow);
                 }
 			});
-			
+
 			//set onChange event
-			$(this._dateRangePicker).on('hide.daterangepicker', function(ev, picker) {
+			$(this._dateRangePicker).on("hide.daterangepicker", function(ev, picker) {
 				//determine if selected range has changed
 				var hasChanged = picker.startDate._d.getTime() !== self._startDate._d.getTime() || picker.endDate._d.getTime() !== self._endDate._d.getTime();
 				if (hasChanged) {
@@ -140,23 +152,23 @@ define([
 				} else {
 					if (!self._hasSelectedDateRange) {
 						//undo auto update input field
-						$(this).val('');
+						$(this).val("");
 					}
 				}
 			});
-			
+
 			//Set placeholderText
-			var defaultPlaceholderText = '';
+			var defaultPlaceholderText = "";
 			if (this.placeholderText && this.placeholderText.trim().length) {
 				defaultPlaceholderText = this.placeholderText;
 			} else {
 				if (this.useCustomDateFormat && this.customDateFormat.trim().length) {
-					defaultPlaceholderText = this.customDateFormat + ' - ' + this.customDateFormat;
+					defaultPlaceholderText = this.customDateFormat + " - " + this.customDateFormat;
 				} else {
-						defaultPlaceholderText = 'MM/DD/YYYY - MM/DD/YYYY';
+						defaultPlaceholderText = "MM/DD/YYYY - MM/DD/YYYY";
 				}
 			}
-			
+
 			$(this._dateRangePicker).attr("placeholder", defaultPlaceholderText);
 
 			// Set label
@@ -170,7 +182,7 @@ define([
                 domClass.add(this.inputLabel, "col-sm-" + this.labelWidth);
                 domClass.add(this.inputWrapper, "col-sm-" + (12 - this.labelWidth));
             } else {
-				domClass.add(this.widgetWrapper, 'no-columns');
+				domClass.add(this.widgetWrapper, "no-columns");
 			}
 
             this._setupEvents();
@@ -182,10 +194,10 @@ define([
 			if (obj) {
 				this._contextObj = obj;
 				this._updateDateRangePicker(this._dateRangePicker, obj.get(this.startDateAttribute), obj.get(this.endDateAttribute));
-				$(this._dateRangePicker).removeAttr('disabled');
+				$(this._dateRangePicker).removeAttr("disabled");
 			} else {
 				//clear value and disable datepicker when there is no contextObject
-				$(this._dateRangePicker).attr("disabled", 'disabled').val('');
+				$(this._dateRangePicker).attr("disabled", "disabled").val("");
 			}
             this._resetSubscriptions();
             callback();
@@ -212,30 +224,54 @@ define([
 				timePicker: this.showTimePicker,
 				timePicker24Hour: this.show24HourTimePicker,
 				timePickerIncrement: this.timePickerIncrement,
+                opensIn: this.opensIn,
+                drops: this.dropsOn,
+                timePickerSeconds: this.showTimePickerSeconds,
+                singleDatePicker: this.isSingleDatePicker,
 				locale: {
-					cancelLabel: 'Clear',
-					firstDay: this.firstDay == 'Monday' ? 1 : 7
+					cancelLabel: "Clear",
+					firstDay: this.firstDay == "Monday" ? 1 : 7
 				}
             };
-			
+
+            if (this.daysList && this.daysList.length > 0) {
+                params.locale.daysOfWeek = this.daysList.map(function (dayObj) {
+                    return dayObj.day;
+                });
+            }
+
+            if (this.monthList && this.monthList.length > 0) {
+                params.locale.monthNames = this.monthList.map(function (monthObj) {
+                    return monthObj.month;
+                });
+            }
+
+            if (this.cancelLabel.trim() !== "") {
+                params.locale.cancelLabel = this.cancelLabel;
+            }
+
+            if (this.applyLabel.trim() !== "") {
+                params.locale.applyLabel = this.applyLabel;
+            }
+
 			if (this.useCustomDateFormat) {
-				params.locale.format = this.customDateFormat;	
+				params.locale.format = this.customDateFormat;
 			}
-			
+
             this.params = params;
         },
 
         _updateDateRangePicker: function _updateDateRangePicker(element, startDate, endDate) {
-            
+
 			console.debug(this.id + "._updateDateRangePicker");
             if (startDate && endDate) {
                 var startDateObject = new Date(startDate);
 				var endDateObject = new Date(endDate);
-				var drpData = $(element).data('daterangepicker');
+				var drpData = $(element).data("daterangepicker");
 				drpData.setStartDate(startDateObject);
 				drpData.setEndDate(endDateObject);
             } else {
-				$(element).val('');
+				$(element).val("");
 				this._contextObj.set(this.startDateAttribute, "");
 				this._contextObj.set(this.endDateAttribute, "");
 			}
@@ -243,10 +279,10 @@ define([
         _onChange: function _onChange(dateRangePickerElement) {
             console.debug(this.id + "._onChange");
 			this._clearValidations();
-			var drp = $(dateRangePickerElement).data('daterangepicker');
+			var drp = $(dateRangePickerElement).data("daterangepicker");
 			var startDate = drp.startDate;
 			var endDate = drp.endDate;
-			
+
 			//set attributes
 			if (startDate && endDate) {
 				this._contextObj.set(this.startDateAttribute, startDate);
@@ -254,7 +290,7 @@ define([
                 if (this.onChangeMicroflow.length > 0) {
                     this._runMicroflow(this._contextObj, this.onChangeMicroflow);
                 }
-				
+
 			} else {
 				this._contextObj.set(this.startDateAttribute, "");
 				this._contextObj.set(this.endDateAttribute, "");
@@ -271,9 +307,9 @@ define([
                 class: "alert alert-danger",
                 innerHTML: message
             });
-			var targetNode = dojoQuery('.mx-dateinput', this.domNode)[0];
+			var targetNode = dojoQuery(".mx-dateinput", this.domNode)[0];
 			if (targetNode){
-				dojo.addClass(targetNode, 'has-error');
+				dojo.addClass(targetNode, "has-error");
 				dojoConstruct.place(this._alertDiv, targetNode);
 			}
         },
@@ -281,9 +317,9 @@ define([
         _clearValidations: function _clearValidations() {
             console.debug(this.id + "._clearValidations");
             dojoConstruct.destroy(this._alertDiv);
-			var targetNode = dojoQuery('.has-error', this.domNode)[0];
+			var targetNode = dojoQuery(".has-error", this.domNode)[0];
             if (targetNode) {
-				dojo.removeClass(targetNode, 'has-error');
+				dojo.removeClass(targetNode, "has-error");
 			}
             this._alertDiv = null;
         },
@@ -304,7 +340,7 @@ define([
 					this._addValidation(startDateMessage);
 					validation.removeAttribute(this.startDateAttribute);
 				}
-				
+
 				if (endDateMessage){
 					this._addValidation(endDateMessage);
 					validation.removeAttribute(this.endDateAttribute);
