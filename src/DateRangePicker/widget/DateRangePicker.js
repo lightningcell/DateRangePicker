@@ -75,7 +75,7 @@ define([
 
         // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
         postCreate: function postCreate() {
-            logger.debug(this.id + ".postCreate");
+            console.debug(this.id + ".postCreate");
 
             if (this.readOnly || this.get("disabled") || this.readonly) {
                 this._readOnly = true;
@@ -178,7 +178,7 @@ define([
 
         // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
         update: function update(obj, callback) {
-            logger.debug(this.id + ".update");
+            console.debug(this.id + ".update");
 			if (obj) {
 				this._contextObj = obj;
 				this._updateDateRangePicker(this._dateRangePicker, obj.get(this.startDateAttribute), obj.get(this.endDateAttribute));
@@ -193,7 +193,7 @@ define([
 
         // mxui.widget._WidgetBase.uninitialize is called when the widget is destroyed. Implement to do special tear-down work.
         uninitialize: function uninitialize() {
-            logger.debug(this.id + ".uninitialize");
+            console.debug(this.id + ".uninitialize");
             if (this._handle) {
                 this.unsubscribe(this._handle);
                 this._handle = null;
@@ -201,12 +201,12 @@ define([
         },
 
         _triggerFocus: function _triggerFocus(element) {
-            logger.debug(this.id + "._triggerFocus");
+            console.debug(this.id + "._triggerFocus");
             $(element).trigger("focus");
         },
 
         _setParams: function _setParams() {
-            logger.debug(this.id + "._setParams");
+            console.debug(this.id + "._setParams");
 			var params = {
 				showWeekNumbers: this.showWeekNumbers,
 				timePicker: this.showTimePicker,
@@ -227,7 +227,7 @@ define([
 
         _updateDateRangePicker: function _updateDateRangePicker(element, startDate, endDate) {
             
-			logger.debug(this.id + "._updateDateRangePicker");
+			console.debug(this.id + "._updateDateRangePicker");
             if (startDate && endDate) {
                 var startDateObject = new Date(startDate);
 				var endDateObject = new Date(endDate);
@@ -241,7 +241,7 @@ define([
 			}
         },
         _onChange: function _onChange(dateRangePickerElement) {
-            logger.debug(this.id + "._onChange");
+            console.debug(this.id + "._onChange");
 			this._clearValidations();
 			var drp = $(dateRangePickerElement).data('daterangepicker');
 			var startDate = drp.startDate;
@@ -262,7 +262,7 @@ define([
         },
 
         _addValidation: function _addValidation(message) {
-            logger.debug(this.id + "._showValidation");
+            console.debug(this.id + "._showValidation");
             if (this._alertDiv !== null) {
                 dojoHtml.set(this._alertDiv, message);
                 return;
@@ -279,7 +279,7 @@ define([
         },
 
         _clearValidations: function _clearValidations() {
-            logger.debug(this.id + "._clearValidations");
+            console.debug(this.id + "._clearValidations");
             dojoConstruct.destroy(this._alertDiv);
 			var targetNode = dojoQuery('.has-error', this.domNode)[0];
             if (targetNode) {
@@ -289,7 +289,7 @@ define([
         },
 
         _handleValidation: function _handleValidation(validations) {
-            logger.debug(this.id + "._handleValidation");
+            console.debug(this.id + "._handleValidation");
             this._clearValidations();
 
 			var validation = validations[0],
