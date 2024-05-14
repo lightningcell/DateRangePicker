@@ -398,7 +398,18 @@ define([
                 if (obj) {
                     parameters.params.guids = [ obj.getGuid() ];
                 }
-                mx.ui.action(mf, parameters, this);
+
+                if (getMxVersion() == 10) {
+                    mx.data.action(
+                        {
+                            params: parameters.params,
+                            error: parameters.error,
+                            callback: parameters.callback
+                        }, this);
+                } else {
+                    mx.ui.action(mf, parameters, this);
+                }
+
             } else if (cb) {
                 cb();
             }
