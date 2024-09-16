@@ -5,8 +5,13 @@
   <icon>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</icon>
   <properties>
 		<!-- General -->
+        <property key="isSingleDatePicker" type="boolean" defaultValue="false">
+            <caption>Use Single Date Picker</caption>
+            <category>General</category>
+            <description>Show only a single calendar to choose one date, select same attribute for start date and end date if setted to true</description>
+        </property>
         <property key="startDateAttribute" type="attribute">
-            <caption>Begin date (Attribute)</caption>
+            <caption>Begin Date (Attribute)</caption>
             <category>General</category>
 			<description></description>
             <attributeTypes>
@@ -14,7 +19,7 @@
             </attributeTypes>
         </property>
 		<property key="endDateAttribute" type="attribute">
-            <caption>End date (Attribute)</caption>
+            <caption>End Date (Attribute)</caption>
             <category>General</category>
 			<description></description>
             <attributeTypes>
@@ -49,6 +54,35 @@
             <caption>Icon tooltip</caption>
             <category>Display</category>
             <description>Tooltip on the calendar icon.</description>
+        </property>
+
+        <property key="opensIn" type="enumeration" defaultValue="left">
+            <caption>Opens In</caption>
+            <category>Display</category>
+            <description>Whether the calendars appears aligned to the left, to the right, or centered</description>
+            <enumerationValues>
+                <!-- right setted to left and left setted to right, due to script problem -->
+                <enumerationValue key="right">Left</enumerationValue>
+                <enumerationValue key="center">Center</enumerationValue>
+                <enumerationValue key="left">Right</enumerationValue>
+            </enumerationValues>
+        </property>
+
+        <property key="dropsOn" type="enumeration" defaultValue="down">
+            <caption>Drops On</caption>
+            <category>Display</category>
+            <description>Whether the calendars appears below or above</description>
+            <enumerationValues>
+                <enumerationValue key="down">Down</enumerationValue>
+                <enumerationValue key="up">Up</enumerationValue>
+                <enumerationValue key="auto">Auto</enumerationValue>
+            </enumerationValues>
+        </property>
+
+        <property key="linkedCalendars" type="boolean" defaultValue="true">
+            <caption>Linked Calendars</caption>
+            <category>Display</category>
+            <description>When true, the calendars show consecutive months and move together. When false, they can be controlled separately.</description>
         </property>
 		<!-- Date Picker options -->
 		<property key="useCustomDateFormat" type="boolean" defaultValue="false">
@@ -89,6 +123,12 @@
             <caption>Timepicker increment</caption>
             <category>Date Picker options</category>
             <description>Increment of the minutes selection list for times (i.e. 30 to allow only selection of times ending in 0 or 30)</description>
+        </property>
+
+        <property key="autoApply" type="boolean" defaultValue="false">
+            <caption>Auto Apply</caption>
+            <category>Date Picker options</category>
+            <description>Hide the apply and cancel buttons, and automatically apply a new date range as soon as two dates are clicked.</description>
         </property>
         <!-- Behavior options -->
         <property key="onChangeMicroflow" type="microflow" required="false">

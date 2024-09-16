@@ -40,12 +40,13 @@ define([
         // Parameters configured in the Modeler.
         iconTooltip: "",
         placeholderText: "",
-
+        
 		useCustomDateFormat: false,
 		customDateFormat: "",
 		showWeekNumbers: false,
 		showTimePicker: false,
 		show24HourTimePicker: false,
+        autoApply: false,
 		timePickerIncrement: 0,
 		
         onChangeMicroflow: "",
@@ -58,6 +59,12 @@ define([
 		labelCaption: "",
         labelWidth: "",
         displayEnum: "",
+        
+        /* Display Options */
+        opensIn: "",
+        dropsOn: "",
+        isSingleDatePicker: false,
+        linkedCalendars: true,
 
         // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
         _handle: null,
@@ -153,7 +160,11 @@ define([
 				if (this.useCustomDateFormat && this.customDateFormat.trim().length) {
 					defaultPlaceholderText = this.customDateFormat + ' - ' + this.customDateFormat;
 				} else {
-						defaultPlaceholderText = 'MM/DD/YYYY - MM/DD/YYYY';
+                        if (this.isSingleDatePicker) {
+                            defaultPlaceholderText = 'MM/DD/YYYY';
+                        } else {
+                            defaultPlaceholderText = 'MM/DD/YYYY - MM/DD/YYYY';
+                        }
 				}
 			}
 			
@@ -212,6 +223,11 @@ define([
 				timePicker: this.showTimePicker,
 				timePicker24Hour: this.show24HourTimePicker,
 				timePickerIncrement: this.timePickerIncrement,
+                autoApply: this.autoApply,
+                opens: this.opensIn,
+                drops: this.dropsOn,
+                singleDatePicker: this.isSingleDatePicker,
+                linkedCalendars: this.linkedCalendars,
 				locale: {
 					cancelLabel: 'Clear',
 					firstDay: this.firstDay == 'Monday' ? 1 : 7
