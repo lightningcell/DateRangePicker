@@ -65,6 +65,9 @@ define([
         dropsOn: "",
         isSingleDatePicker: false,
         linkedCalendars: true,
+        showDropdowns: false,
+
+        maxSpanDays: 0,
 
         // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
         _handle: null,
@@ -228,6 +231,7 @@ define([
                 drops: this.dropsOn,
                 singleDatePicker: this.isSingleDatePicker,
                 linkedCalendars: this.linkedCalendars,
+                showDropdowns: this.showDropdowns,
 				locale: {
 					cancelLabel: 'Clear',
 					firstDay: this.firstDay == 'Monday' ? 1 : 7
@@ -237,6 +241,10 @@ define([
 			if (this.useCustomDateFormat) {
 				params.locale.format = this.customDateFormat;	
 			}
+
+            if (this.maxSpanDays != 0) {
+                params.maxSpan = {days: this.maxSpanDays}
+            }
 			
             this.params = params;
         },

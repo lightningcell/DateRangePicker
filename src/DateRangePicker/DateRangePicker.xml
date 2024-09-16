@@ -84,6 +84,13 @@
             <category>Display</category>
             <description>When true, the calendars show consecutive months and move together. When false, they can be controlled separately.</description>
         </property>
+
+        <property key="showDropdowns" type="boolean" defaultValue="false">
+            <caption>Show Dropdowns</caption>
+            <category>Display</category>
+            <description>Show year and month select boxes above calendars to jump to a specific month and year.</description>
+        </property>
+
 		<!-- Date Picker options -->
 		<property key="useCustomDateFormat" type="boolean" defaultValue="false">
             <caption>Use custom date format</caption>
@@ -129,6 +136,12 @@
             <caption>Auto Apply</caption>
             <category>Date Picker options</category>
             <description>Hide the apply and cancel buttons, and automatically apply a new date range as soon as two dates are clicked.</description>
+        </property>
+
+        <property key="maxSpanDays" type="integer" defaultValue="0">
+            <caption>Max Day Span</caption>
+            <category>Date Picker options</category>
+            <description>The maximum span between the selected start and end dates. 0 means no limit</description>
         </property>
         <!-- Behavior options -->
         <property key="onChangeMicroflow" type="microflow" required="false">
